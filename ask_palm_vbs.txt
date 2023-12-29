@@ -1,0 +1,39 @@
+Option Explicit
+
+Function Ask_PaLM2(apiKey As String, question As String)
+    Dim objHTTP As Object
+    Dim url As String
+    Dim payload As String
+    Dim response As String
+    Dim n1 As Integer
+    Dim n2 As Integer
+    Dim headers As String
+    Dim prompt As String
+    Dim requestBody As String
+    Dim options As String
+    If apiKey = "" Then
+        Ask_PaLM2 = "Get your api key from https://makersuite.google.com/app/apikey"
+        Return
+    End If
+    url = "https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText"
+    url = url + "?key=" + apiKey
+    payload = "{""method"":""POST"",""headers"":""{""Content-Type"":""application/json""}"",""payload"":""{""""prompt"""":""""{""""text"""":""""{qn}""""}""""}""}"
+    payload = "{prompt:{text:""{qn}""}}"
+    payload = Replace(payload, "{qn}", question)
+    Set objHTTP = CreateObject("MSXML2.ServerXMLHTTP")
+    objHTTP.Open "POST", url, False
+    objHTTP.setRequestHeader "Content-Type", "application/json"
+    objHTTP.send payload
+    response = objHTTP.ResponseText
+    headers = """output"": """
+    n1 = InStr(response, headers)
+    n2 = Len(headers)
+    response = Mid(response, n1 + n2, Len(response) - n1)
+    n1 = InStr(response, """")
+    response = Left(response, n1 - 1)
+    response = Replace(response, "\n", vbCrLf)
+    Ask_PaLM2 = response
+End Function
+
+
+
