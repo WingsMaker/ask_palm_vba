@@ -17,7 +17,6 @@ Function Ask_PaLM2(apiKey As String, question As String)
     End If
     url = "https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText"
     url = url + "?key=" + apiKey
-    payload = "{""method"":""POST"",""headers"":""{""Content-Type"":""application/json""}"",""payload"":""{""""prompt"""":""""{""""text"""":""""{qn}""""}""""}""}"
     payload = "{prompt:{text:""{qn}""}}"
     payload = Replace(payload, "{qn}", question)
     Set objHTTP = CreateObject("MSXML2.ServerXMLHTTP")
@@ -34,6 +33,4 @@ Function Ask_PaLM2(apiKey As String, question As String)
     response = Replace(response, "\n", vbCrLf)
     Ask_PaLM2 = response
 End Function
-
-
 
